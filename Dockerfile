@@ -24,5 +24,5 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader
-COPY src/ .
-CMD ["php", "main.php"]
+COPY . .
+CMD ["php", "public/main.php"]
