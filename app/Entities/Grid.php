@@ -39,9 +39,4 @@ class Grid
     {
         return $this->liveCells;
     }
-
-    public function setLiveCells(array $liveCells): void
-    {
-        $this->liveCells = $liveCells;
-    }
 }

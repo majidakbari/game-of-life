@@ -19,7 +19,7 @@ class RunGameCommand extends Command
 
     public function __invoke(OutputInterface $output): int
     {
-        $center = intdiv(50, 2);
+        $center = intdiv(25, 2);
         $glider = [
             new Cell($center + 0, $center + 1),
             new Cell($center + 1, $center + 2),
@@ -27,14 +27,26 @@ class RunGameCommand extends Command
             new Cell($center + 2, $center + 1),
             new Cell($center + 2, $center + 2),
         ];
-        $grid = new Grid(50, $glider);
+        $initialGrid = new Grid(25, $glider);
         while (true) {
-            $this->gameOfLife->draw($grid);
+            $this->gameOfLife->draw($initialGrid);
             usleep(200000);
-            if (!$this->gameOfLife->advance($grid)) {
+            $newGrid = $this->gameOfLife->advance($initialGrid);
+            if ($this->isGameFinished($newGrid, $initialGrid)) {
                 break;
             }
+            $initialGrid = $newGrid;
         }
         return Command::SUCCESS;
+    }
+
+    private function isGameFinished(Grid $newGrid, Grid $grid): bool
+    {
+        $aKeys = array_keys($newGrid->getLiveCells());
+        $bKeys = array_keys($grid->getLiveCells());
+
+        sort($aKeys);
+        sort($bKeys);
+        return $aKeys === $bKeys;
     }
 }

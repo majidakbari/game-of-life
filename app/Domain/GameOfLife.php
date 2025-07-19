@@ -7,10 +7,9 @@ use App\Entities\Grid;
 
 class GameOfLife
 {
-    public function advance(Grid $grid): bool
+    public function advance(Grid $grid): Grid
     {
         $neighborCounts = [];
-
         foreach ($grid->getLiveCells() as $key => $_) {
             [$x, $y] = explode(',', $key);
             $x = (int)$x;
@@ -32,28 +31,26 @@ class GameOfLife
 
         $newLiveCells = [];
 
+
         foreach ($neighborCounts as $key => $count) {
-            $alive = isset($this->liveCells[$key]);
+            $alive = isset($grid->getLiveCells()[$key]);
             if (($alive && ($count === 2 || $count === 3)) || (!$alive && $count === 3)) {
-                $newLiveCells[$key] = true;
+                [$newLiveCellX, $newLiveCellY] = explode(',', $key);
+                $newLiveCells[] = new Cell($newLiveCellX, $newLiveCellY);
             }
         }
 
-        if ($grid->getLiveCells() === $newLiveCells) {
-            return false;
-        }
 
-        $grid->setLiveCells($newLiveCells);
-        return true;
+        return new Grid($grid->getSize(), $newLiveCells);
     }
 
     public function draw(Grid $grid): void
     {
-        echo "\033[H\033[2J"; // Clear terminal
+        echo PHP_EOL;
 
         for ($y = 0; $y < $grid->getSize(); $y++) {
             for ($x = 0; $x < $grid->getSize(); $x++) {
-                echo isset($this->liveCells["$x,$y"]) ? "⬛" : "⬜";
+                echo isset($grid->getLiveCells()["$x,$y"]) ? "⬛" : "⬜";
             }
             echo PHP_EOL;
         }
