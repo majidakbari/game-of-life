@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  php-cli:
+    build:
+      dockerfile: Dockerfile
+    container_name: php-cli
+    restart: on-failure
+    env_file:
+      - .env
