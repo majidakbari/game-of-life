@@ -30,6 +30,11 @@ class Grid
         return $cell->getX() >= 0 && $cell->getX() < $this->size && $cell->getY() >= 0 && $cell->getY() < $this->size;
     }
 
+    public function isAlive(Cell $cell): bool
+    {
+        return isset($this->liveCells[$cell->coordinates()]);
+    }
+
     public function getSize(): int
     {
         return $this->size;
