@@ -4,13 +4,20 @@ namespace App\Domain;
 
 use App\Entities\Cell;
 use App\Entities\Grid;
+use App\Exceptions\InvalidGameStateException;
 
 class GameOfLife
 {
     private Grid $currentState;
 
+    /**
+     * @throws InvalidGameStateException
+     */
     public function advance(): Grid
     {
+        if (!isset($this->currentState)) {
+            throw new InvalidGameStateException();
+        }
         $neighborCounts = [];
         foreach ($this->currentState->getLiveCells() as $key => $_) {
             [$x, $y] = explode(',', $key);
