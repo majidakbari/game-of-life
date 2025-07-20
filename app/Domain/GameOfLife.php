@@ -14,31 +14,28 @@ class GameOfLife
         $neighborCounts = [];
         foreach ($this->currentState->getLiveCells() as $key => $_) {
             [$x, $y] = explode(',', $key);
-            $x = (int)$x;
-            $y = (int)$y;
+            $x = (int) $x;
+            $y = (int) $y;
             for ($dx = -1; $dx <= 1; $dx++) {
                 for ($dy = -1; $dy <= 1; $dy++) {
-                    if ($dx === 0 && $dy === 0) continue;
-
                     $nx = $x + $dx;
                     $ny = $y + $dy;
-
-                    if (!$this->currentState->inBounds(new Cell($nx, $ny))) continue;
-
-                    $nkey = "$nx,$ny";
-                    $neighborCounts[$nkey] = ($neighborCounts[$nkey] ?? 0) + 1;
+                    if (($nx === $x && $ny === $y) || !$this->currentState->inBounds(new Cell($nx, $ny))) {
+                        continue;
+                    }
+                    $nKey = "$nx,$ny";
+                    $neighborCounts[$nKey] = ($neighborCounts[$nKey] ?? 0) + 1;
                 }
             }
         }
 
         $newLiveCells = [];
-
-
         foreach ($neighborCounts as $key => $count) {
-            $alive = isset($this->currentState->getLiveCells()[$key]);
+            [$cellX, $cellY] = explode(',', $key);
+            $targetCell = new Cell($cellX, $cellY);
+            $alive = $this->currentState->isAlive($targetCell);
             if (($alive && ($count === 2 || $count === 3)) || (!$alive && $count === 3)) {
-                [$newLiveCellX, $newLiveCellY] = explode(',', $key);
-                $newLiveCells[] = new Cell($newLiveCellX, $newLiveCellY);
+                $newLiveCells[] = $targetCell;
             }
         }
         return new Grid($this->currentState->getSize(), $newLiveCells);
