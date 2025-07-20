@@ -9,7 +9,7 @@ use App\Entities\Grid;
 
 class ConsolePresenter implements PresentationInterface
 {
-    public function present(Grid $grid): void
+    public function present(Grid $grid): bool
     {
         echo PHP_EOL;
         for ($x = 0; $x < $grid->getSize(); $x++) {
@@ -18,5 +18,6 @@ class ConsolePresenter implements PresentationInterface
             }
             echo PHP_EOL;
         }
+        return true;
     }
 }

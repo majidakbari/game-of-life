@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Commands;
 
 use App\Domain\GameInterface;
@@ -12,7 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:run-game', description: 'Runs the target game until it is over.')]
 class RunGameCommand extends Command
 {
-
     public function __construct(
         private readonly GameInterface $game,
         private readonly PresentationInterface $presentation,
@@ -22,6 +22,8 @@ class RunGameCommand extends Command
 
     public function __invoke(OutputInterface $output): int
     {
+        $output->writeln('<info>Running the game</info>');
+
         $gridSize = (int) $_ENV['GRID_SIZE'];
         $center = intdiv($gridSize, 2);
         $glider = [
@@ -41,6 +43,7 @@ class RunGameCommand extends Command
             $currentState = $newState;
             usleep(200000);
         }
+        $output->writeln('<info>The game is over!</info>');
         return Command::SUCCESS;
     }
 
