@@ -22,7 +22,8 @@ class RunGameCommand extends Command
 
     public function __invoke(OutputInterface $output): int
     {
-        $center = intdiv(25, 2);
+        $gridSize = (int) $_ENV['GRID_SIZE'];
+        $center = intdiv($gridSize, 2);
         $glider = [
             new Cell($center + 0, $center + 1),
             new Cell($center + 1, $center + 2),
@@ -30,7 +31,7 @@ class RunGameCommand extends Command
             new Cell($center + 2, $center + 1),
             new Cell($center + 2, $center + 2),
         ];
-        $initialGrid = new Grid(25, $glider);
+        $initialGrid = new Grid($gridSize, $glider);
         while (true) {
             $this->gameOfLife->setCurrentState($initialGrid);
             $this->presentation->present($initialGrid);
