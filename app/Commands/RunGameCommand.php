@@ -9,7 +9,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:game-of-life', description: 'Runs the the Game of life')]
+#[AsCommand(name: 'app:run-game', description: 'Runs the target game until it is over.')]
 class RunGameCommand extends Command
 {
 
