@@ -1,10 +1,17 @@
 version: '3.8'
 
 services:
-  php-cli:
+  app:
     build:
-      dockerfile: Dockerfile
-    container_name: php-cli
+      context: .
+    container_name: app
     restart: on-failure
     env_file:
       - .env
+
+  test:
+    build:
+      context: .
+    container_name: test
+    restart: no
+    command: ./vendor/bin/phpunit --configuration phpunit.xml
