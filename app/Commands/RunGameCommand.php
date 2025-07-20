@@ -1,7 +1,7 @@
 <?php
 namespace App\Commands;
 
-use App\Domain\GameOfLife;
+use App\Domain\GameInterface;
 use App\Entities\Cell;
 use App\Entities\Grid;
 use App\Presentation\PresentationInterface;
@@ -14,7 +14,7 @@ class RunGameCommand extends Command
 {
 
     public function __construct(
-        private readonly GameOfLife $gameOfLife,
+        private readonly GameInterface $game,
         private readonly PresentationInterface $presentation,
     ) {
         parent::__construct();
@@ -31,24 +31,23 @@ class RunGameCommand extends Command
             new Cell($center + 2, $center + 1),
             new Cell($center + 2, $center + 2),
         ];
-        $initialGrid = new Grid($gridSize, $glider);
+        $currentState = new Grid($gridSize, $glider);
         while (true) {
-            $this->gameOfLife->setCurrentState($initialGrid);
-            $this->presentation->present($initialGrid);
-            $newGrid = $this->gameOfLife->advance();
-            if ($this->isGameOver($newGrid, $initialGrid)) {
+            $this->presentation->present($currentState);
+            $newState = $this->game->advance($currentState);
+            if ($this->isGameOver($newState, $currentState)) {
                 break;
             }
-            $initialGrid = $newGrid;
+            $currentState = $newState;
             usleep(200000);
         }
         return Command::SUCCESS;
     }
 
-    private function isGameOver(Grid $newGrid, Grid $grid): bool
+    private function isGameOver(Grid $newState, Grid $currentState): bool
     {
-        $newLiveCells = array_keys($newGrid->getLiveCells());
-        $currentLiveCells = array_keys($grid->getLiveCells());
+        $newLiveCells = array_keys($newState->getLiveCells());
+        $currentLiveCells = array_keys($currentState->getLiveCells());
         sort($newLiveCells);
         sort($currentLiveCells);
         return $newLiveCells === $currentLiveCells;
