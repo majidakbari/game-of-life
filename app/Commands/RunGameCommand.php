@@ -27,12 +27,13 @@ class RunGameCommand extends Command
         $gridSize = (int) $_ENV['GRID_SIZE'];
         $center = intdiv($gridSize, 2);
         $glider = [
-            new Cell($center + 0, $center + 1),
-            new Cell($center + 1, $center + 2),
-            new Cell($center + 2, $center + 0),
-            new Cell($center + 2, $center + 1),
-            new Cell($center + 2, $center + 2),
+            new Cell($center - 1, $center),
+            new Cell($center, $center + 1),
+            new Cell($center + 1, $center - 1),
+            new Cell($center + 1, $center),
+            new Cell($center + 1, $center + 1),
         ];
+
         $currentState = new Grid($gridSize, $glider);
         while (true) {
             $this->presentation->present($currentState);
@@ -43,14 +44,15 @@ class RunGameCommand extends Command
             $currentState = $newState;
             usleep(200000);
         }
+
         $output->writeln('<info>The game is over!</info>');
         return Command::SUCCESS;
     }
 
     private function isGameOver(Grid $newState, Grid $currentState): bool
     {
-        $newLiveCells = array_keys($newState->getLiveCells());
-        $currentLiveCells = array_keys($currentState->getLiveCells());
+        $newLiveCells = array_map(fn (Cell $cell) => $cell->coordinates(), $newState->getLiveCells());
+        $currentLiveCells = array_map(fn (Cell $cell) => $cell->coordinates(), $currentState->getLiveCells());
         sort($newLiveCells);
         sort($currentLiveCells);
         return $newLiveCells === $currentLiveCells;

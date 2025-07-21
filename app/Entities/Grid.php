@@ -11,17 +11,16 @@ class Grid
     /**
      * @var array<string, bool>
      */
-    private array $liveCells = [];
+    private array $liveCellsMap = [];
 
     /**
      * @param Cell[] $liveCells
-     * @param int $size
      */
-    public function __construct(private readonly int $size, array $liveCells)
+    public function __construct(private readonly int $size, private readonly array $liveCells)
     {
         foreach ($liveCells as $cell) {
             if ($this->inBounds($cell) && $cell->isAlive()) {
-                $this->liveCells[$cell->coordinates()] = true;
+                $this->liveCellsMap[$cell->coordinates()] = true;
             }
         }
     }
@@ -33,7 +32,7 @@ class Grid
 
     public function isAlive(Cell $cell): bool
     {
-        return isset($this->liveCells[$cell->coordinates()]);
+        return isset($this->liveCellsMap[$cell->coordinates()]);
     }
 
     public function getSize(): int

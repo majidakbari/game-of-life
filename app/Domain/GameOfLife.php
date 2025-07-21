@@ -17,13 +17,12 @@ class GameOfLife implements GameInterface
     /**
      * @return array<string, int>
      */
-    public function countLiveNeighbours(Grid $grid): array
+    private function countLiveNeighbours(Grid $grid): array
     {
         $output = [];
-        foreach ($grid->getLiveCells() as $key => $_) {
-            [$x, $y] = explode(',', $key);
-            $x = (int)$x;
-            $y = (int)$y;
+        foreach ($grid->getLiveCells() as $cell) {
+            $x = $cell->getX();
+            $y = $cell->getY();
             for ($dx = -1; $dx <= 1; $dx++) {
                 for ($dy = -1; $dy <= 1; $dy++) {
                     $nx = $x + $dx;
@@ -42,7 +41,7 @@ class GameOfLife implements GameInterface
     /**
      * @return Cell[]
      */
-    public function applyRules(array $liveNeighbours, Grid $grid): array
+    private function applyRules(array $liveNeighbours, Grid $grid): array
     {
         $newLiveCells = [];
         foreach ($liveNeighbours as $key => $count) {

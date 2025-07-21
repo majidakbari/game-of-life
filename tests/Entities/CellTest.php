@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class CellTest extends TestCase
 {
-    public function testCoordinatesShouldWork(): void
+    public function testCoordinatesShouldReturnTheCorrectCellCoordinates(): void
     {
         // arrange
         $sut = new Cell(100, 20);
