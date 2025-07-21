@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Commands;
 
 use App\Commands\RunGameCommand;

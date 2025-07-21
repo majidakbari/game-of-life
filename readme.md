@@ -64,7 +64,7 @@ Run PHP CodeSniffer to fix code style issues:
 ./vendor/bin/phpcs
 ```
 
-### Suggestions for improvement
+## Suggestions for improvement
 
 - Add integration and feature tests for broader coverage
 - Apply static analysis tools like PHPStan
