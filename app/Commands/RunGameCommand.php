@@ -33,8 +33,8 @@ class RunGameCommand extends Command
             new Cell($center + 1, $center),
             new Cell($center + 1, $center + 1),
         ];
-
         $currentState = new Grid($gridSize, $glider);
+
         while (true) {
             $this->presentation->present($currentState);
             $newState = $this->game->advance($currentState);
